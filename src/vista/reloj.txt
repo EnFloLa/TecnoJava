@@ -1,0 +1,7 @@
+JInternalFrame reloj = new JInternalFrame("");
+reloj.setBounds(58, 164, 131, 55);
+escritorio.add(reloj);
+		
+JLabel lblReloj = new JLabel("00:00:00");
+reloj.getContentPane().add(lblReloj, BorderLayout.CENTER);
+reloj.setVisible(true);

@@ -1,0 +1,123 @@
+-- borra la bd si existe
+DROP DATABASE IF EXISTS tecnostore;
+-- creamos la bd
+CREATE DATABASE tecnostore;
+-- activamos la bd
+USE tecnostore;
+
+create table tb_tipos(
+id_tipo  int not null primary key,
+des_tipo varchar(20)
+);
+
+CREATE TABLE tb_usuarios(
+codigo  int auto_increment,
+nombre varchar(15),
+apellido varchar(25),
+usuario  char(4) NOT NULL,
+clave    char(5),
+fnacim   date  null,
+tipo    int DEFAULT 2  ,
+estado  int(1) DEFAULT 1,
+primary key (codigo),
+foreign key(tipo) references tb_tipos (id_tipo)
+);
+
+create table tb_categorias(
+idtipo		int not null primary key,
+descripcion varchar(60)
+);
+
+create table tb_productos(
+idprod      char(5) not null,
+descripcion varchar(100),
+stock		int,
+precio		decimal(8,2),
+idtipo		int,
+primary key (idprod), 
+foreign key (idtipo) references tb_categorias(idtipo)
+);
+
+create table tb_cab_boleta(
+num_bol    char(5) not null,
+fch_bol    date,
+cod_cliente  int not null,
+cod_vendedor int not null,
+total_bol decimal(8,2),
+primary key (num_bol),
+foreign key (cod_cliente) references tb_usuarios(codigo),
+foreign key (cod_vendedor) references tb_usuarios(codigo)
+);
+
+create table tb_det_boleta(
+num_bol     char(5) not null,
+idprod      char(5) not null,
+cantidad    int,
+preciovta   decimal(8,2),
+importe		decimal(8,2),
+primary key (num_bol,idprod),
+foreign key (num_bol) references tb_cab_boleta(num_bol),
+foreign key (idprod) references tb_productos(idprod)
+);
+
+-- inserts
+insert into tb_tipos values (1, 'Administrador');
+insert into tb_tipos values (2, 'Cliente');
+insert into tb_tipos values (3, 'Cajero');
+
+insert into tb_usuarios values (1,'Javier', 'Avila','U001', '10001', curdate(),2,1);
+insert into tb_usuarios values (2,'Jesus', 'Cornejo','U002', '10002', curdate(),2,1);
+insert into tb_usuarios values (null,'Corayma','Turpo','C001', '10001', curdate(),3,1);
+insert into tb_usuarios values (10,'Enrique', 'Flores','ADMI', 'ADMIN', curdate(),1,1);
+insert into tb_usuarios values (null,'Ana', 'Carpio','CAJA', 'CAJA2', curdate(),3,2);
+
+insert into tb_categorias values (1, 'Teclado');
+insert into tb_categorias values (2, 'Mouse');
+insert into tb_categorias values (3, 'Monitor');
+insert into tb_categorias values (4, 'Procesador');
+insert into tb_categorias values (5, 'Tarjeta grafica');
+insert into tb_categorias values (6, 'Memoria RAM');
+insert into tb_categorias values (7, 'Disco Duro');
+insert into tb_categorias values (8, 'SSD');
+insert into tb_categorias values (9, 'Cooler');
+insert into tb_categorias values (10, 'Gabinete');
+insert into tb_categorias values (11, 'Maindboard');
+insert into tb_categorias values (12, 'Cable HDMI');
+insert into tb_categorias values (13, 'Fuente de Poder');
+insert into tb_categorias values (14, 'Auriculares');
+insert into tb_categorias values (15, 'Gamepad');
+
+insert into tb_productos values ('P0001','Logitech Atx MMt 007',10,600.0,1);
+insert into tb_productos values ('P0002','Antryx sk560',5,150.0,1);
+insert into tb_productos values ('P0003','Razer Basilisk Gaming Mouse',7,100.0,2);
+insert into tb_productos values ('P0004','Ratón EndGame Gear XM1 V2',8,75.0,2);
+insert into tb_productos values ('P0005','Monitor VIOTEK GFV22CB 144Hz',3,600.0,3);
+insert into tb_productos values ('P0006','Sceptre Curved Gaming Monitor',2,1500.0,3);
+insert into tb_productos values ('P0007','Procesador Intel Celeron 3.40GHZ',15,375.0,4);
+insert into tb_productos values ('P0008','Procesador Intel Gold G5420 3.8GHZ',10,550.0,4);
+insert into tb_productos values ('P0009','RX 6400 Pulse',7,2300.0,5);
+insert into tb_productos values ('P0010','RTX 3060 Ti EAGLE OC',9,4000.5,5);
+insert into tb_productos values ('P0011','Corsair Vengeance RGB PRO 16GB DDR4',10,300.5,6);
+insert into tb_productos values ('P0012','TEAMGROUP T-Force Delta RGB DDR4 16GB',10,270.0,6);
+insert into tb_productos values ('P0013','Seagate Pro SATA HDD 10TB 256MB',15,615.5,7);
+insert into tb_productos values ('P0014','Seagate IronWolf 4TB HDD  SATA 6Gb/s',16,315.0,7);
+insert into tb_productos values ('P0015','SSD M.2 512GB ACER RE100',5,215.0,8);
+insert into tb_productos values ('P0016','SanDisk SSD PLUS 1TB SSD SATA 6 Gb/s',8,142.5,8);
+insert into tb_productos values ('P0017','SSD TEAMGROUP NVMe PCIe M.2 2280',9,149.88,8);
+insert into tb_productos values ('P0018','Supercooler Mlbb Lolwr Pokemon Unite',7,220.5,9);
+insert into tb_productos values ('P0019','Fan Aerocool Mirage 12 Argb Pro',5,390.5,9);
+insert into tb_productos values ('P0020','Case Gamer Aerocool Prime Rgb',20,219.0,10);
+insert into tb_productos values ('P0021','Case Gamer Rgb Draco Gaming K1',18,210.0,10);
+insert into tb_productos values ('P0022','Gigabyte Ga-a320-s2h Amd',7,250.0,11);
+insert into tb_productos values ('P0023','Mainboard Asrock H370-hdv',10,325.0,11);
+insert into tb_productos values ('P0024','STB Set Top Box',20,22.0,12);
+insert into tb_productos values ('P0025','DVI Digital Video Input',30,13.5,12);
+insert into tb_productos values ('P0026','EVGA 220-G5-0650-X1 Super Nova G5',10,320.0,13);
+insert into tb_productos values ('P0027','Segotep 750W Fully Modular Gaming Power',10,300.0,13);
+insert into tb_productos values ('P0028','Audífono Bluetooth R100',14,449.0,14);
+insert into tb_productos values ('P0029','AirPods 2nda Generación',11,529.0,14);
+insert into tb_productos values ('P0030','Gamepad Gamesir 2021',18,379.0,15);
+insert into tb_productos values ('P0031','Gamepad 4gatillos',4,25.99,15);
+
+insert into tb_cab_boleta values ('B0001',curdate(), 1, 10, 7.50);
+
